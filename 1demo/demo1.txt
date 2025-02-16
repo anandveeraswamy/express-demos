@@ -1,20 +1,33 @@
-This tutorial demonstrates 
-1) How to initialiase your node project
-2) Anlaysing the package.json file which is the configuration file for your project
-3) Modify the package.json file to include a start scripts
-4) Install development dependencies
-5) Install production dependencies
-6) Use nodemon to automatically restart your server whenever you make changes
-7) Use of express middleware and chaining of middlewares
-npm scripts to create a configuration file for your project
+# Node.js Project Tutorial
 
-0) Start with a simple app.js file with the following contents
+This tutorial demonstrates how to:
+
+1. Initialize your Node.js project
+2. Analyze the `package.json` file (the configuration file for your project)
+3. Modify `package.json` to include a start script
+4. Install development dependencies
+5. Install production dependencies
+6. Use `nodemon` to automatically restart your server when changes are made
+7. Use Express middleware and chain middlewares
+
+## Step 0: Create a Simple `app.js` File
+
+Create an `app.js` file with the following contents:
+
+```
 const http = require('http');
 console.log("Hello world");
+```
 
+## Step 1: Initialize Your Node.js Project
 
-1) npm init
-will generate the package.json file which is a configuration file for your project
+Run the following command in the terminal:
+```
+npm init
+```
+This will generate a `package.json` file, which is a configuration file for your project. It should look like this:
+
+```
 {
   "name": "1demo",
   "version": "1.0.0",
@@ -26,102 +39,96 @@ will generate the package.json file which is a configuration file for your proje
   "license": "ISC",
   "description": ""
 }
+```
 
-2) 
-Add "start": "node app.js" in the scripts section as shown below:
-{
-  "name": "1demo",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-	"start": "node app.js" // added this line
-  },
-  "author": "Anand Veeraswamy",
-  "license": "ISC",
-  "description": ""
-}
+## Step 2: Add a Start Script
 
-3) run "npm install --save express" in the terminal to install express as a production dependency. This will add express as a production dependency in the packages.json file as shown below:
+Modify the `scripts` section of `package.json` to include:
+
+```
 {
-  "name": "1demo",
-  "version": "1.0.0",
-  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
-  },
-  "author": "Anand Veeraswamy",
-  "license": "ISC",
-  "description": "",
-  "dependencies": { // this was added 
-    "express": "^4.21.2"
   }
 }
+```
 
-4) Demonstrate the import and basic use of Express
-Update the app.js file with the following contents
-const http = require('http');
+## Step 3: Install Express (Production Dependency)
 
-const express = require('express'); // import express
+Run the following command:
+```
+npm install --save express
+```
+This will add Express as a production dependency in `package.json`:
 
-const app = express(); // store express in a const by calling the express as a function
-
-const server = http.createServer(app); // pass app as the paramete to the createServer function
-
-server.listen(3000);
-
-5) (Optional) Install a development dependency nodemon to automatically restart the server when you make changes to your code by running the following command on the terminal: npm install nodemon --save-dev
-
-Replace "start": "node app.js" with "start": "nodemon app.js"
-We are now using nodemon to start our server not node
-
-Note: Codespace automatically saves your files and will keep restarting the server whenever you make any changes to the app.js file.
-
-this should change the packages.json file as shown below:
+```
 {
-  "name": "1demo",
-  "version": "1.0.0",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "author": "Anand Veeraswamy",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^4.21.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.9"
   }
 }
+```
 
-6) Update app.js as shown below and start the server. The website will not load but in the console you should see the message 'In the middleware!'
-https://expressjs.com/en/5x/api.html#app.use
+## Step 4: Import and Use Express
+
+Update `app.js` with the following content:
+
+```
 const http = require('http');
+const express = require('express');
 
-const express = require('express'); // import express
+const app = express();
+const server = http.createServer(app);
 
-const app = express(); // store express in a const by calling the express as a function
+server.listen(3000);
+```
+
+## Step 5: Install `nodemon` (Development Dependency)
+
+To automatically restart the server when changes are made, install `nodemon` as a development dependency:
+
+```
+npm install --save-dev nodemon
+```
+
+Modify the `scripts` section in `package.json` to use `nodemon`:
+
+```
+{
+  "scripts": {
+    "start": "nodemon app.js"
+  }
+}
+```
+
+Now, running `npm start` will use `nodemon` to monitor your project.
+
+## Step 6: Add Express Middleware
+
+Update `app.js` to include middleware:
+
+```
+const http = require('http');
+const express = require('express');
+
+const app = express();
 
 app.use((req, res, next) => {
     console.log('In the middleware!');
 });
 
-const server = http.createServer(app); // pass app as the paramete to the createServer function
-
+const server = http.createServer(app);
 server.listen(3004);
+```
 
-7) Add another app.use with another message and restart the server. You will only see 'In the middleware!'. You will not see 'In another middleware'! Why?
+Run `npm start`, and you should see `In the middleware!` printed in the console when making requests.
 
-const http = require('http');
+## Step 7: Add Another Middleware
 
-const express = require('express'); // import express
+Modify `app.js` as follows:
 
-const app = express(); // store express in a const by calling the express as a function
-
+```
 app.use((req, res, next) => {
     console.log('In the middleware!');
 });
@@ -129,18 +136,15 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     console.log('In another middleware');
 });
+```
 
-const server = http.createServer(app); // pass app as the paramete to the createServer function
+Restart the server and observe that only the first message (`In the middleware!`) appears. This happens because the request never moves to the next middleware.
 
-server.listen(3004);
+## Step 8: Use `next()` to Chain Middleware
 
-8) Add 'next()' in the first app.use function. And now you should see both "In the middleware" and "In another middleware!"
-const http = require('http');
+Modify `app.js` again:
 
-const express = require('express'); // import express
-
-const app = express(); // store express in a const by calling the express as a function
-
+```
 app.use((req, res, next) => {
     console.log("In the middleware");
     next();
@@ -148,7 +152,18 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
     console.log("In another middleware!");
-})
-const server = http.createServer(app); // pass app as the paramete to the createServer function
+});
+```
 
-server.listen(3007);
+Now both middleware functions execute because `next()` is called in the first middleware.
+
+## Conclusion
+
+You have successfully:
+- Initialized a Node.js project
+- Installed and used Express
+- Configured `nodemon` for automatic server restarts
+- Implemented middleware in Express
+
+Happy coding! 🚀
+
