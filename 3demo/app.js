@@ -18,3 +18,12 @@ app.use((req, res, next) => {
 });
 
 app.listen(3000);
+
+/*
+Note that we have deleted the http import statement at the top: const http = require('http');
+And we have replace the following two lines:
+    const server = http.createServer(app); // pass app as the paramete to the createServer function
+    server.listen(3010);
+with just 
+    app.listen(3000);
+*/
